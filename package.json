@@ -1,4 +1,3 @@
-
 {
   "name": "bookandgo_backend",
   "version": "1.0.0",
@@ -9,6 +8,7 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
     "express": "^4.18.2",
     "mongoose": "^8.0.0"
   }
