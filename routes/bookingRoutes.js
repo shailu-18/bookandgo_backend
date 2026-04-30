@@ -16,7 +16,7 @@ const bookingSchema = new mongoose.Schema({
 const Booking = mongoose.model("Booking", bookingSchema);
 
 // CREATE
-router.post("/", async (req, res) => {
+router.post("/api/bookings", async (req, res) => {
   try {
     const newBooking = new Booking(req.body);
     await newBooking.save();
@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
 });
 
 // GET ALL
-router.get("/", async (req, res) => {
+router.get("/api/bookings", async (req, res) => {
   try {
     const data = await Booking.find();
     res.json(data);
