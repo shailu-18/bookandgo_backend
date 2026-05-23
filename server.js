@@ -5,10 +5,10 @@ const cors=require("cors");
 require("dotenv").config();
 
 const bookingRoutes=
-require("./models/bookingRoutes");
+require("./routes/bookingRoutes");
 
 const feedbackRoutes=
-require("./models/feedbackRoutes");
+require("./routes/feedbackRoutes");
 
 const app=express();
 
