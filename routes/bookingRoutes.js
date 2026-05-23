@@ -23,6 +23,29 @@ mongoose.model(
   bookingSchema
 );
 
+router.delete("/:id", async(req,res)=>{
+
+try{
+
+await Booking.findByIdAndDelete(
+req.params.id
+);
+
+res.json({
+message:"Deleted successfully"
+});
+
+}
+catch(err){
+
+res.status(500).json({
+message:err.message
+});
+
+}
+
+});
+
 // CREATE
 router.post("/", async (req,res)=>{
 
