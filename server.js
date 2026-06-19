@@ -23,6 +23,7 @@ process.env.MONGO_URI
 console.log(
 "MongoDB Connected"
 );
+console.log("DB Name:", mongoose.connection.db.databaseName);
 })
 .catch((err)=>{
 console.log(err);
