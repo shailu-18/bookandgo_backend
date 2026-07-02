@@ -10,6 +10,9 @@ require("./routes/bookingRoutes");
 const feedbackRoutes=
 require("./routes/feedbackRoutes");
 
+const authRoutes=
+require("./routes/authRoutes");
+
 const app=express();
 
 app.use(cors());
@@ -38,6 +41,10 @@ app.use(
 "/api/feedbacks",
 feedbackRoutes
 );
+
+app.use(
+"/api/auth",
+authRoutes);
 
 // test route
 app.get("/",(req,res)=>{
