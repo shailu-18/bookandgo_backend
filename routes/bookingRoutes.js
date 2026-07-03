@@ -73,24 +73,29 @@ error:err.message
 });
 
 // GET ALL
-router.get("/", async (req, res) => {
-  try {
-    const { email } = req.query;
+router.get("/", async(req,res)=>{
 
-    let data;
+try{
 
-    if (email) {
-      data = await Booking.find({ email });
-    } else {
-      data = await Booking.find();
-    }
+const email =
+req.query.email;
 
-    res.json(data);
-  } catch (err) {
-    res.status(500).json({
-      message: err.message,
-    });
-  }
+const data =
+await Booking.find({
+email:email
+});
+
+res.json(data);
+
+}
+catch(err){
+
+res.status(500).json({
+message:err.message
+});
+
+}
+
 });
 
 module.exports=router;
