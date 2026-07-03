@@ -17,85 +17,77 @@ const bookingSchema = new mongoose.Schema({
 });
 
 const Booking =
-mongoose.models.Booking ||
-mongoose.model(
-  "Booking",
-  bookingSchema
-);
+  mongoose.models.Booking ||
+  mongoose.model("Booking", bookingSchema);
 
-router.delete("/:id", async(req,res)=>{
+// CREATE BOOKING
+router.post("/", async (req, res) => {
 
-try{
+  try {
 
-await Booking.findByIdAndDelete(
-req.params.id
-);
+    const booking = new Booking(req.body);
 
-res.json({
-message:"Deleted successfully"
-});
+    await booking.save();
 
-}
-catch(err){
+    res.status(201).json(booking);
 
-res.status(500).json({
-message:err.message
-});
+  } catch (err) {
 
-}
+    res.status(500).json({
+      message: "Failed to save booking",
+      error: err.message
+    });
+
+  }
 
 });
 
-// CREATE
-router.post("/", async (req,res)=>{
+// GET BOOKINGS
+router.get("/", async (req, res) => {
 
-try{
+  try {
 
-const booking=new Booking(req.body);
+    const email = req.query.email;
 
-await booking.save();
+    let data;
 
-res.status(201).json({
-message:"Booking saved",
-data:booking
-});
+    if (email) {
 
-}
-catch(err){
+      data = await Booking.find({ email });
 
-res.status(500).json({
-message:"Booking save failed",
-error:err.message
-});
+    } else {
 
-}
+      data = await Booking.find();
 
-});
+    }
 
-// GET ALL
-router.get("/", async(req,res)=>{
+    res.json(data);
 
-try{
+  } catch (err) {
 
-const email =
-req.query.email;
+    res.status(500).json(err);
 
-const data =
-await Booking.find({
-email:email
-});
-
-res.json(data);
-
-}
-catch(err){
-
-res.status(500).json({
-message:err.message
-});
-
-}
+  }
 
 });
 
-module.exports=router;
+// DELETE BOOKING
+router.delete("/:id", async (req, res) => {
+
+  try {
+
+    await Booking.findByIdAndDelete(req.params.id);
+
+    res.json({
+      message: "Deleted"
+    });
+
+  } catch (err) {
+
+    res.status(500).json(err);
+
+  }
+
+});
+
+module.exports = router;

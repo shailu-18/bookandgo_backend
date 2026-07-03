@@ -7,10 +7,7 @@ const User = require("../models/User");
 const router = express.Router();
 
 
-// ======================
 // SIGNUP
-// ======================
-
 router.post("/signup", async (req, res) => {
 
   try {
@@ -27,12 +24,13 @@ router.post("/signup", async (req, res) => {
 
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword =
+      await bcrypt.hash(password, 10);
 
     const newUser = new User({
       name,
       email,
-      password: hashedPassword,
+      password: hashedPassword
     });
 
     await newUser.save();
@@ -41,9 +39,7 @@ router.post("/signup", async (req, res) => {
       message: "Signup Successful"
     });
 
-  }
-
-  catch (err) {
+  } catch (err) {
 
     res.status(500).json({
       message: err.message
@@ -54,17 +50,15 @@ router.post("/signup", async (req, res) => {
 });
 
 
-// ======================
 // LOGIN
-// ======================
-
 router.post("/login", async (req, res) => {
 
   try {
 
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user =
+      await User.findOne({ email });
 
     if (!user) {
 
@@ -74,10 +68,8 @@ router.post("/login", async (req, res) => {
 
     }
 
-    const isMatch = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const isMatch =
+      await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
 
@@ -89,15 +81,11 @@ router.post("/login", async (req, res) => {
 
     const token = jwt.sign(
 
-      {
-        id: user._id
-      },
+      { id: user._id },
 
       "bookandgo",
 
-      {
-        expiresIn: "1d"
-      }
+      { expiresIn: "1d" }
 
     );
 
@@ -111,9 +99,7 @@ router.post("/login", async (req, res) => {
 
     });
 
-  }
-
-  catch (err) {
+  } catch (err) {
 
     res.status(500).json({
 
@@ -126,25 +112,15 @@ router.post("/login", async (req, res) => {
 });
 
 
-// ======================
-// FORGOT PASSWORD
-// ======================
-
+// RESET PASSWORD
 router.put("/reset-password", async (req, res) => {
 
   try {
 
     const { email, password } = req.body;
 
-    if (!email || !password) {
-
-      return res.status(400).json({
-        message: "Email and Password are required"
-      });
-
-    }
-
-    const user = await User.findOne({ email });
+    const user =
+      await User.findOne({ email });
 
     if (!user) {
 
@@ -154,23 +130,43 @@ router.put("/reset-password", async (req, res) => {
 
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword =
+      await bcrypt.hash(password, 10);
 
     user.password = hashedPassword;
 
     await user.save();
 
-    res.status(200).json({
-      message: "Password updated successfully"
+    res.json({
+      message: "Password updated"
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+
+      message: err.message
+
     });
 
   }
 
-  catch (err) {
+});
 
-    res.status(500).json({
-      message: err.message
-    });
+
+// GET ALL USERS
+router.get("/users", async (req, res) => {
+
+  try {
+
+    const users =
+      await User.find({}, "-password");
+
+    res.json(users);
+
+  } catch (err) {
+
+    res.status(500).json(err);
 
   }
 
